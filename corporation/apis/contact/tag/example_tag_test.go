@@ -18,8 +18,8 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/fastwego/wxwork/corporation"
-	"github.com/fastwego/wxwork/corporation/apis/contact/tag"
+	"github.com/linbaozhong/wxwork/corporation"
+	"github.com/linbaozhong/wxwork/corporation/apis/contact/tag"
 )
 
 func ExampleCreate() {

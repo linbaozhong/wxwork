@@ -29,8 +29,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/fastwego/wxwork/corporation/type/type_event"
-	"github.com/fastwego/wxwork/corporation/type/type_message"
+	"github.com/linbaozhong/wxwork/corporation/type/type_event"
+	"github.com/linbaozhong/wxwork/corporation/type/type_message"
 )
 
 var MockCorporation *Corporation

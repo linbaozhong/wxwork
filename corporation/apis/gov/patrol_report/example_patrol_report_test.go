@@ -17,8 +17,8 @@ package patrol_report_test
 import (
 	"fmt"
 
-	"github.com/fastwego/wxwork/corporation"
-	"github.com/fastwego/wxwork/corporation/apis/gov/patrol_report"
+	"github.com/linbaozhong/wxwork/corporation"
+	"github.com/linbaozhong/wxwork/corporation/apis/gov/patrol_report"
 )
 
 func ExampleGetGridInfo() {

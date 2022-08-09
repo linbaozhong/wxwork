@@ -20,7 +20,7 @@ import (
 	"net/http/httptest"
 	"sync"
 
-	"github.com/fastwego/wxwork/corporation"
+	"github.com/linbaozhong/wxwork/corporation"
 )
 
 var MockCorporation *corporation.Corporation

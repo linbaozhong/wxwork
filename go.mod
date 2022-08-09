@@ -1,4 +1,4 @@
-module github.com/fastwego/wxwork
+module github.com/linbaozhong/wxwork
 
 go 1.14
 

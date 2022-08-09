@@ -17,8 +17,8 @@ package checkin_test
 import (
 	"fmt"
 
-	"github.com/fastwego/wxwork/corporation"
-	"github.com/fastwego/wxwork/corporation/apis/oa/checkin"
+	"github.com/linbaozhong/wxwork/corporation"
+	"github.com/linbaozhong/wxwork/corporation/apis/oa/checkin"
 )
 
 func ExampleGetCorpCheckinOption() {

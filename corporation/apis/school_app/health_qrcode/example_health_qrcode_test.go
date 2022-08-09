@@ -17,8 +17,8 @@ package health_qrcode_test
 import (
 	"fmt"
 
-	"github.com/fastwego/wxwork/corporation"
-	"github.com/fastwego/wxwork/corporation/apis/school_app/health_qrcode"
+	"github.com/linbaozhong/wxwork/corporation"
+	"github.com/linbaozhong/wxwork/corporation/apis/school_app/health_qrcode"
 )
 
 func ExampleGetTeacherCustomizeHealthInfo() {

@@ -17,8 +17,8 @@ package pstncc_test
 import (
 	"fmt"
 
-	"github.com/fastwego/wxwork/corporation"
-	"github.com/fastwego/wxwork/corporation/apis/oa/pstncc"
+	"github.com/linbaozhong/wxwork/corporation"
+	"github.com/linbaozhong/wxwork/corporation/apis/oa/pstncc"
 )
 
 func ExampleCall() {

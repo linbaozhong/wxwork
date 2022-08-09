@@ -17,8 +17,8 @@ package corp_group_test
 import (
 	"fmt"
 
-	"github.com/fastwego/wxwork/corporation"
-	"github.com/fastwego/wxwork/corporation/apis/corp_group"
+	"github.com/linbaozhong/wxwork/corporation"
+	"github.com/linbaozhong/wxwork/corporation/apis/corp_group"
 )
 
 func ExampleListAppShareInfo() {

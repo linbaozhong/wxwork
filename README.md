@@ -2,13 +2,13 @@
 
 A fast [wxwork](https://work.weixin.qq.com/api/doc) development sdk written in Golang
 
-[![GoDoc](https://pkg.go.dev/badge/github.com/fastwego/wxwork?status.svg)](https://pkg.go.dev/github.com/fastwego/wxwork?tab=doc)
-[![Go Report Card](https://goreportcard.com/badge/github.com/fastwego/wxwork)](https://goreportcard.com/report/github.com/fastwego/wxwork)
+[![GoDoc](https://pkg.go.dev/badge/github.com/linbaozhong/wxwork?status.svg)](https://pkg.go.dev/github.com/linbaozhong/wxwork?tab=doc)
+[![Go Report Card](https://goreportcard.com/badge/github.com/linbaozhong/wxwork)](https://goreportcard.com/report/github.com/linbaozhong/wxwork)
 
 ## 快速开始 & demo
 
 ```shell script
-go get github.com/fastwego/wxwork
+go get github.com/linbaozhong/wxwork
 ```
 
 ```go
@@ -32,7 +32,7 @@ resp, err := user.SimpleList(ContactApp, params)
 
 完整演示项目：
 
-[https://github.com/fastwego/wxwork-demo](https://github.com/fastwego/wxwork-demo)
+[https://github.com/linbaozhong/wxwork-demo](https://github.com/linbaozhong/wxwork-demo)
 
 接口列表：
 
@@ -49,7 +49,7 @@ resp, err := user.SimpleList(ContactApp, params)
 「快」作为框架设计的核心理念，体现在方方面面：
 
 - 使用 Go 语言，开发快、编译快、部署快、运行快，轻松服务海量用户
-- 丰富的[文档](https://pkg.go.dev/github.com/fastwego/wxwork) / [教程](corporation/doc/SUMMARY.md) 和 [演示代码](https://github.com/fastwego/wxwork-demo) ，快速上手，5 分钟即可搭建一套完整的微信服务
+- 丰富的[文档](https://pkg.go.dev/github.com/linbaozhong/wxwork) / [教程](corporation/doc/SUMMARY.md) 和 [演示代码](https://github.com/linbaozhong/wxwork-demo) ，快速上手，5 分钟即可搭建一套完整的微信服务
 - 独立清晰的模块划分，快速熟悉整个框架，没有意外，一切都是你期望的样子
 - 甚至连框架自身的大部分代码也是自动生成的，维护更新快到超乎想象
 
@@ -83,7 +83,7 @@ resp, err := user.SimpleList(ContactApp, params)
 
 单台服务器支撑不住访问流量/想提高服务可用性？
 
-只需 [设置 GetAccessTokenFunc 方法](https://pkg.go.dev/github.com/fastwego/wxwork/corporation?tab=doc#App.SetGetAccessTokenHandler) ，从中控服务获取 AccessToken，即可解决多实例刷新冲突/覆盖的问题
+只需 [设置 GetAccessTokenFunc 方法](https://pkg.go.dev/github.com/linbaozhong/wxwork/corporation?tab=doc#App.SetGetAccessTokenHandler) ，从中控服务获取 AccessToken，即可解决多实例刷新冲突/覆盖的问题
 
 ### 活跃的开发者社区
 

@@ -17,8 +17,8 @@ package customer_assign_test
 import (
 	"fmt"
 
-	"github.com/fastwego/wxwork/corporation"
-	"github.com/fastwego/wxwork/corporation/apis/external_contact/customer_assign"
+	"github.com/linbaozhong/wxwork/corporation"
+	"github.com/linbaozhong/wxwork/corporation/apis/external_contact/customer_assign"
 )
 
 func ExampleGetUnassignedList() {

@@ -17,8 +17,8 @@ package resident_report_test
 import (
 	"fmt"
 
-	"github.com/fastwego/wxwork/corporation"
-	"github.com/fastwego/wxwork/corporation/apis/gov/resident_report"
+	"github.com/linbaozhong/wxwork/corporation"
+	"github.com/linbaozhong/wxwork/corporation/apis/gov/resident_report"
 )
 
 func ExampleGetGridInfo() {

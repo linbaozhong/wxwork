@@ -20,8 +20,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/fastwego/wxwork/corporation"
-	"github.com/fastwego/wxwork/corporation/test"
+	"github.com/linbaozhong/wxwork/corporation"
+	"github.com/linbaozhong/wxwork/corporation/test"
 )
 
 func TestMain(m *testing.M) {

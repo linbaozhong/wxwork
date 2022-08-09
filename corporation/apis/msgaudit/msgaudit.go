@@ -19,7 +19,7 @@ import (
 	"bytes"
 	"net/url"
 
-	"github.com/fastwego/wxwork/corporation"
+	"github.com/linbaozhong/wxwork/corporation"
 )
 
 const (

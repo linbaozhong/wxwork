@@ -20,8 +20,8 @@ import (
 
 	"github.com/faabiosr/cachego/file"
 	"github.com/faabiosr/cachego/sync"
-	"github.com/fastwego/wxwork/corporation"
 	"github.com/gomodule/redigo/redis"
+	"github.com/linbaozhong/wxwork/corporation"
 )
 
 func ExampleCorporation_SetAccessTokenCacheDriver() {

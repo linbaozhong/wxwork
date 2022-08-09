@@ -18,7 +18,7 @@ package corp_group
 import (
 	"bytes"
 
-	"github.com/fastwego/wxwork/corporation"
+	"github.com/linbaozhong/wxwork/corporation"
 )
 
 const (
