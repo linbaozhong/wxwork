@@ -32,7 +32,7 @@ resp, err := user.SimpleList(ContactApp, params)
 
 完整演示项目：
 
-[https://github.com/linbaozhong/wxwork-demo](https://github.com/linbaozhong/wxwork-demo)
+[https://github.com/fastwego/wxwork-demo](https://github.com/fastwego/wxwork-demo)
 
 接口列表：
 
