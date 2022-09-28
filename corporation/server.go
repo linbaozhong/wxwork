@@ -16,7 +16,7 @@ package corporation
 
 import (
 	"crypto/sha1"
-	"encoding/xml"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -81,20 +81,85 @@ func (s *Server) EchoStr(writer http.ResponseWriter, request *http.Request) {
 
 }
 
+//
+///*
+//ParseXML 解析微信推送过来的消息/事件
+//
+//POST /api/callback?msg_signature=ASDFQWEXZCVAQFASDFASDFSS
+//&timestamp=13500001234
+//&nonce=123412323
+//
+//<xml>
+//   <ToUserName><![CDATA[toUser]]></ToUserName>
+//   <AgentID><![CDATA[toAgentID]]></AgentID>
+//   <Encrypt><![CDATA[msg_encrypt]]></Encrypt>
+//</xml>
+//*/
+//func (s *Server) ParseXML(request *http.Request) (m interface{}, err error) {
+//	var body []byte
+//	body, err = ioutil.ReadAll(request.Body)
+//	if err != nil {
+//		return
+//	}
+//
+//	if s.Ctx.Corporation.Logger != nil {
+//		s.Ctx.Corporation.Logger.Println(string(body))
+//	}
+//
+//	// 加密格式 的消息
+//	encryptMsg := messagetype.EncryptMessage{}
+//	err = json.Unmarshal(body, &encryptMsg)
+//	if err != nil {
+//		return
+//	}
+//
+//	// 验证签名
+//	strs := []string{
+//		request.URL.Query().Get("timestamp"),
+//		request.URL.Query().Get("nonce"),
+//		s.Ctx.Config.Token,
+//		encryptMsg.Encrypt,
+//	}
+//	sort.Strings(strs)
+//
+//	h := sha1.New()
+//	_, _ = io.WriteString(h, strings.Join(strs, ""))
+//	signature := fmt.Sprintf("%x", h.Sum(nil))
+//
+//	if msgSignature := request.URL.Query().Get("msg_signature"); signature != msgSignature {
+//		err = fmt.Errorf("%s != %s", signature, msgSignature)
+//		return
+//	}
+//
+//	// 解密
+//	var xmlMsg []byte
+//	_, xmlMsg, _, err = util.AESDecryptMsg(encryptMsg.Encrypt, s.Ctx.Config.EncodingAESKey)
+//	if err != nil {
+//		return
+//	}
+//	body = xmlMsg
+//
+//	if s.Ctx.Corporation.Logger != nil {
+//		s.Ctx.Corporation.Logger.Println("AESDecryptMsg ", string(body))
+//	}
+//
+//	return parseMsg(body)
+//}
+
 /*
-ParseXML 解析微信推送过来的消息/事件
+ParseJSON 解析微信推送过来的消息/事件
 
 POST /api/callback?msg_signature=ASDFQWEXZCVAQFASDFASDFSS
 &timestamp=13500001234
 &nonce=123412323
 
-<xml>
-   <ToUserName><![CDATA[toUser]]></ToUserName>
-   <AgentID><![CDATA[toAgentID]]></AgentID>
-   <Encrypt><![CDATA[msg_encrypt]]></Encrypt>
-</xml>
+{
+	"tousername": "wx5823bf96d3bd56c7",
+	"encrypt": "No8isRLoXqFMhLlpe7R/DA7UbJ88DKJxDhJH/UVG3o1ib0Fhzdd3qWYHH/KL1mITv5qOCp2FbyILqfI7zazrp/ARgSHR177OCrv8O9UrMHWdnOaMXaz+mLd5X5VWm5r2J3Qpm+NdTQRPhHbce88frKF3wqTaZunKW7ae87bRZUfaq5tLFnyTsf6aiy0su3SsQ06dQGKPcHfYHY3upB881008Q9t9xeAZ/uqfXpYQgSLQfaX+fk/K/FQEl4QpLk94eD1YjluFY3uLnKp40zDyxgeWRAmgTtmx1eLwediVqZ8=",
+	"agentid": "218"
+}
 */
-func (s *Server) ParseXML(request *http.Request) (m interface{}, err error) {
+func (s *Server) ParseJSON(request *http.Request) (m interface{}, err error) {
 	var body []byte
 	body, err = ioutil.ReadAll(request.Body)
 	if err != nil {
@@ -107,7 +172,7 @@ func (s *Server) ParseXML(request *http.Request) (m interface{}, err error) {
 
 	// 加密格式 的消息
 	encryptMsg := messagetype.EncryptMessage{}
-	err = xml.Unmarshal(body, &encryptMsg)
+	err = json.Unmarshal(body, &encryptMsg)
 	if err != nil {
 		return
 	}
@@ -132,7 +197,7 @@ func (s *Server) ParseXML(request *http.Request) (m interface{}, err error) {
 
 	// 解密
 	var xmlMsg []byte
-	_, xmlMsg, _, err = util.AESDecryptMsg(encryptMsg.Encrypt, s.Ctx.Config.EncodingAESKey)
+	_, xmlMsg, _, err = util.DecryptMsg(encryptMsg.Encrypt, s.Ctx.Config.EncodingAESKey)
 	if err != nil {
 		return
 	}
@@ -148,7 +213,7 @@ func (s *Server) ParseXML(request *http.Request) (m interface{}, err error) {
 // 解析消息/事件
 func parseMsg(body []byte) (m interface{}, err error) {
 	message := messagetype.Message{}
-	err = xml.Unmarshal(body, &message)
+	err = json.Unmarshal(body, &message)
 	fmt.Println(message)
 	if err != nil {
 		return
@@ -157,42 +222,42 @@ func parseMsg(body []byte) (m interface{}, err error) {
 	switch message.MsgType {
 	case messagetype.MsgTypeText:
 		msg := messagetype.MessageText{}
-		err = xml.Unmarshal(body, &msg)
+		err = json.Unmarshal(body, &msg)
 		if err != nil {
 			return
 		}
 		return msg, nil
 	case messagetype.MsgTypeImage:
 		msg := messagetype.MessageImage{}
-		err = xml.Unmarshal(body, &msg)
+		err = json.Unmarshal(body, &msg)
 		if err != nil {
 			return
 		}
 		return msg, nil
 	case messagetype.MsgTypeVoice:
 		msg := messagetype.MessageVoice{}
-		err = xml.Unmarshal(body, &msg)
+		err = json.Unmarshal(body, &msg)
 		if err != nil {
 			return
 		}
 		return msg, nil
 	case messagetype.MsgTypeVideo:
 		msg := messagetype.MessageVideo{}
-		err = xml.Unmarshal(body, &msg)
+		err = json.Unmarshal(body, &msg)
 		if err != nil {
 			return
 		}
 		return msg, nil
 	case messagetype.MsgTypeLocation:
 		msg := messagetype.MessageLocation{}
-		err = xml.Unmarshal(body, &msg)
+		err = json.Unmarshal(body, &msg)
 		if err != nil {
 			return
 		}
 		return msg, nil
 	case messagetype.MsgTypeLink:
 		msg := messagetype.MessageLink{}
-		err = xml.Unmarshal(body, &msg)
+		err = json.Unmarshal(body, &msg)
 		if err != nil {
 			return
 		}
@@ -207,7 +272,7 @@ func parseMsg(body []byte) (m interface{}, err error) {
 // ParseEvent 解析微信推送过来的事件
 func parseEvent(body []byte) (m interface{}, err error) {
 	event := eventtype.Event{}
-	err = xml.Unmarshal(body, &event)
+	err = json.Unmarshal(body, &event)
 	if err != nil {
 		return
 	}
@@ -215,56 +280,56 @@ func parseEvent(body []byte) (m interface{}, err error) {
 	// 事件
 	case eventtype.EventTypeChangeContact:
 		msg := eventtype.EventChangeContact{}
-		err = xml.Unmarshal(body, &msg)
+		err = json.Unmarshal(body, &msg)
 		if err != nil {
 			return
 		}
 		switch msg.ChangeType {
 		case eventtype.EventTypeChangeContactCreateUser:
 			msg := eventtype.EventChangeContactCreateUser{}
-			err = xml.Unmarshal(body, &msg)
+			err = json.Unmarshal(body, &msg)
 			if err != nil {
 				return
 			}
 			return msg, nil
 		case eventtype.EventTypeChangeContactUpdateUser:
 			msg := eventtype.EventChangeContactUpdateUser{}
-			err = xml.Unmarshal(body, &msg)
+			err = json.Unmarshal(body, &msg)
 			if err != nil {
 				return
 			}
 			return msg, nil
 		case eventtype.EventTypeChangeContactDeleteUser:
 			msg := eventtype.EventChangeContactDeleteUser{}
-			err = xml.Unmarshal(body, &msg)
+			err = json.Unmarshal(body, &msg)
 			if err != nil {
 				return
 			}
 			return msg, nil
 		case eventtype.EventTypeChangeContactCreateParty:
 			msg := eventtype.EventChangeContactCreateParty{}
-			err = xml.Unmarshal(body, &msg)
+			err = json.Unmarshal(body, &msg)
 			if err != nil {
 				return
 			}
 			return msg, nil
 		case eventtype.EventTypeChangeContactUpdateParty:
 			msg := eventtype.EventChangeContactUpdateParty{}
-			err = xml.Unmarshal(body, &msg)
+			err = json.Unmarshal(body, &msg)
 			if err != nil {
 				return
 			}
 			return msg, nil
 		case eventtype.EventTypeChangeContactDeleteParty:
 			msg := eventtype.EventChangeContactDeleteParty{}
-			err = xml.Unmarshal(body, &msg)
+			err = json.Unmarshal(body, &msg)
 			if err != nil {
 				return
 			}
 			return msg, nil
 		case eventtype.EventTypeChangeContactUpdateTag:
 			msg := eventtype.EventChangeContactUpdateTag{}
-			err = xml.Unmarshal(body, &msg)
+			err = json.Unmarshal(body, &msg)
 			if err != nil {
 				return
 			}
@@ -272,63 +337,63 @@ func parseEvent(body []byte) (m interface{}, err error) {
 		}
 	case eventtype.EventTypeBatchJobResult:
 		msg := eventtype.EventBatchJobResult{}
-		err = xml.Unmarshal(body, &msg)
+		err = json.Unmarshal(body, &msg)
 		if err != nil {
 			return
 		}
 		return msg, nil
 	case eventtype.EventTypeApproval:
 		msg := eventtype.EventApproval{}
-		err = xml.Unmarshal(body, &msg)
+		err = json.Unmarshal(body, &msg)
 		if err != nil {
 			return
 		}
 		return msg, nil
 	case eventtype.EventTypeChangeExternalContact:
 		msg := eventtype.EventChangeExternalContact{}
-		err = xml.Unmarshal(body, &msg)
+		err = json.Unmarshal(body, &msg)
 		if err != nil {
 			return
 		}
 		switch msg.ChangeType {
 		case eventtype.EventTypeChangeExternalContactAddExternalContact:
 			msg := eventtype.EventChangeExternalContactAddExternalContact{}
-			err = xml.Unmarshal(body, &msg)
+			err = json.Unmarshal(body, &msg)
 			if err != nil {
 				return
 			}
 			return msg, nil
 		case eventtype.EventTypeChangeExternalContactAddHalfExternalContact:
 			msg := eventtype.EventChangeExternalContactAddHalfExternalContact{}
-			err = xml.Unmarshal(body, &msg)
+			err = json.Unmarshal(body, &msg)
 			if err != nil {
 				return
 			}
 			return msg, nil
 		case eventtype.EventTypeChangeExternalContactChangeExternalChat:
 			msg := eventtype.EventChangeExternalContactChangeExternalChat{}
-			err = xml.Unmarshal(body, &msg)
+			err = json.Unmarshal(body, &msg)
 			if err != nil {
 				return
 			}
 			return msg, nil
 		case eventtype.EventTypeChangeExternalContactDelExternalContact:
 			msg := eventtype.EventChangeExternalContactDelExternalContact{}
-			err = xml.Unmarshal(body, &msg)
+			err = json.Unmarshal(body, &msg)
 			if err != nil {
 				return
 			}
 			return msg, nil
 		case eventtype.EventTypeChangeExternalContactEditExternalContact:
 			msg := eventtype.EventChangeExternalContactEditExternalContact{}
-			err = xml.Unmarshal(body, &msg)
+			err = json.Unmarshal(body, &msg)
 			if err != nil {
 				return
 			}
 			return msg, nil
 		case eventtype.EventTypeChangeExternalContactDelFollowUser:
 			msg := eventtype.EventChangeExternalContactDelFollowUser{}
-			err = xml.Unmarshal(body, &msg)
+			err = json.Unmarshal(body, &msg)
 			if err != nil {
 				return
 			}
@@ -336,63 +401,63 @@ func parseEvent(body []byte) (m interface{}, err error) {
 		}
 	case eventtype.EventTypeTaskCardClick:
 		msg := eventtype.EventTaskCardClick{}
-		err = xml.Unmarshal(body, &msg)
+		err = json.Unmarshal(body, &msg)
 		if err != nil {
 			return
 		}
 		return msg, nil
 	case eventtype.EventTypeMenuView:
 		msg := eventtype.EventMenuView{}
-		err = xml.Unmarshal(body, &msg)
+		err = json.Unmarshal(body, &msg)
 		if err != nil {
 			return
 		}
 		return msg, nil
 	case eventtype.EventTypeMenuClick:
 		msg := eventtype.EventMenuClick{}
-		err = xml.Unmarshal(body, &msg)
+		err = json.Unmarshal(body, &msg)
 		if err != nil {
 			return
 		}
 		return msg, nil
 	case eventtype.EventTypeMenuLocationSelect:
 		msg := eventtype.EventMenuLocationSelect{}
-		err = xml.Unmarshal(body, &msg)
+		err = json.Unmarshal(body, &msg)
 		if err != nil {
 			return
 		}
 		return msg, nil
 	case eventtype.EventTypeMenuPicSysPhoto:
 		msg := eventtype.EventMenuPicSysPhoto{}
-		err = xml.Unmarshal(body, &msg)
+		err = json.Unmarshal(body, &msg)
 		if err != nil {
 			return
 		}
 		return msg, nil
 	case eventtype.EventTypeMenuPicSysPhotoOrAlbum:
 		msg := eventtype.EventMenuPicSysPhotoOrAlbum{}
-		err = xml.Unmarshal(body, &msg)
+		err = json.Unmarshal(body, &msg)
 		if err != nil {
 			return
 		}
 		return msg, nil
 	case eventtype.EventTypeMenuPicWeixin:
 		msg := eventtype.EventMenuPicWeixin{}
-		err = xml.Unmarshal(body, &msg)
+		err = json.Unmarshal(body, &msg)
 		if err != nil {
 			return
 		}
 		return msg, nil
 	case eventtype.EventTypeMenuScanCodePush:
 		msg := eventtype.EventMenuScanCodePush{}
-		err = xml.Unmarshal(body, &msg)
+		err = json.Unmarshal(body, &msg)
 		if err != nil {
 			return
 		}
 		return msg, nil
 	case eventtype.EventTypeMenuScanCodeWaitMsg:
 		msg := eventtype.EventMenuScanCodeWaitMsg{}
-		err = xml.Unmarshal(body, &msg)
+		err = json.Unmarshal(body, &msg)
 		if err != nil {
 			return
 		}
@@ -407,7 +472,7 @@ func (s *Server) Response(writer http.ResponseWriter, request *http.Request, rep
 
 	output := []byte("") // 默认回复
 	if reply != nil {
-		output, err = xml.Marshal(reply)
+		output, err = json.Marshal(reply)
 		if err != nil {
 			return
 		}
@@ -419,7 +484,7 @@ func (s *Server) Response(writer http.ResponseWriter, request *http.Request, rep
 			return
 		}
 
-		output, err = xml.Marshal(message)
+		output, err = json.Marshal(message)
 		if err != nil {
 			return
 		}

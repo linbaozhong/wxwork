@@ -17,7 +17,7 @@ package corporation
 import (
 	"bytes"
 	"crypto/sha1"
-	"encoding/xml"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -188,7 +188,7 @@ func TestServer_Response(t *testing.T) {
 			body, _ := ioutil.ReadAll(resp.Body)
 
 			encryptReply := type_message.ReplyEncryptMessage{}
-			_ = xml.Unmarshal(body, &encryptReply)
+			_ = json.Unmarshal(body, &encryptReply)
 
 			if encryptReply.Encrypt == "" {
 				t.Errorf("Encrypt not found")
