@@ -40,12 +40,12 @@ type Event struct {
 <Event><![CDATA[taskcard_click]]></Event>
 <EventKey><![CDATA[key111]]></EventKey>
 <TaskId><![CDATA[taskid111]]></TaskId >
-<AgentId>1</AgentId>
+<SuiteID>1</SuiteID>
 </xml>
 */
 type EventTaskCardClick struct {
 	Event
 	EventKey string `xml:"EventKey"`
 	TaskId   string `xml:"TaskId"`
-	AgentId  string `xml:"AgentId"`
+	AgentId  string `xml:"SuiteID"`
 }

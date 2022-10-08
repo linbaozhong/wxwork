@@ -37,7 +37,7 @@ func Setup() {
 			Corpid: "Cropid",
 		})
 		MockApp = MockCorporation.NewApp(corporation.AppConfig{
-			AgentId:        "AgentId",
+			AgentId:        "SuiteID",
 			Secret:         "SECRET",
 			Token:          "TOKEN",
 			EncodingAESKey: "EncodingAESKey",
