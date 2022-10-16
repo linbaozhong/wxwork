@@ -29,7 +29,7 @@ const (
   <ApprovalInfo>
     <ThirdNo>201806010001</ThirdNo>
     <OpenSpName>付款</OpenSpName>
-    <OpenTemplateID>1234567890</OpenTemplateID>
+    <TemplateID>1234567890</TemplateID>
     <OpenSpStatus>1</OpenSpStatus>
     <ApplyTime>1527837645</ApplyTime>
     <ApplyUserName>xiaoming</ApplyUserName>
@@ -79,7 +79,7 @@ type EventApproval struct {
 		Text           string `xml:",chardata"`
 		ThirdNo        string `xml:"ThirdNo"`
 		OpenSpName     string `xml:"OpenSpName"`
-		OpenTemplateId string `xml:"OpenTemplateID"`
+		OpenTemplateId string `xml:"TemplateID"`
 		OpenSpStatus   string `xml:"OpenSpStatus"`
 		ApplyTime      string `xml:"ApplyTime"`
 		ApplyUserName  string `xml:"ApplyUserName"`
